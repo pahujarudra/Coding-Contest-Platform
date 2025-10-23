@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Contest Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <!-- Title -->
+        <div class="nav-title">CodeArena</div>
+
+        <!-- Main Navigation -->
+        <div class="nav-menu" id="nav-menu">
+            <div id="nav-home" class="nav-link">Home</div>
+            <div id="nav-contests" class="nav-link">Contests</div>
+            <div id="nav-profile" class="nav-link hidden">Profile</div>
+            <div id="nav-admin" class="nav-link hidden">Admin</div>
+        </div>
+
+        <!-- User Section -->
+        <div class="nav-user-section">
+            <!-- Logged In (User Profile) -->
+            <div class="user-profile hidden">
+                <div class="user-avatar">
+                    <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"
+                        alt="User Avatar" class="avatar-img">
+                </div>
+                <span class="nav-fullname fullname">User</span>
+            </div>
+
+            <!-- Not Logged In (Auth Buttons) -->
+            <div class="auth-buttons">
+                <button id="login" class="btn">Login</button>
+                <button id="sign-up" class="btn">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="page">
+            <h1>Welcome to Code Arena</h1>
+            <p>Challenge yourself with competitive programming contests, improve your coding skills, and compete with
+                developers worldwide.</p>
+            <div class="grid">
+                <div>
+                    🏆
+                    <h4>Competitive Contests</h4>
+                    <p>Join live contests and compete with programmers globally</p>
+                </div>
+                <div>
+                    📚
+                    <h4>Practice Problems</h4>
+                    <p>Solve thousands of problems to sharpen your skills</p>
+                </div>
+                <div>
+                    📊
+                    <h4>Track Progress</h4>
+                    <p>Monitor your performance and see your improvement</p>
+                </div>
+            </div>
+            <div class="active">
+                <h2>Active Contests Overview</h2>
+                <div class="home-contest">
+                    <p style="padding: 10px 0;">Loading Active Contest...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contests" class="page hidden">
+            <div class="current-contests">
+                <h1>All Contests</h1>
+                <select id="contests-selector">
+                    <option value="all">All Contests</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="active">Active</option>
+                    <option value="ended">Ended</option>
+                </select>
+            </div>
+
+            <div id="contests-box"></div>
+
+        </section>
+
+        <section id="profile" class="page hidden">
+            <h1>Profile</h1>
+            <div class="grid">
+                <div class="grid-child grid-profile">
+                    <div class="avatar">
+                        <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"
+                            alt="User Avatar" class="avatar-img">
+                    </div>
+                    <div class=" profile-fullname fullname">User</div>
+                    <div class="username">@username</div>
+                    <div class="email">user@gmail.com</div>
+                    <button class="edit-profile btn">Edit Profile</button>
+                    <button id="logout-btn" class="logout-btn btn">Logout</button>
+                </div>
+                <div class="grid-child grid-activity">
+                    <h2>Recent Activity</h2>
+                    <p>No Recent Activity. Start solving problems to view your activity.</p>
+                </div>
+                <div class="grid-child grid-badges">
+                    <h2>Badges</h2>
+                    <div class="all-badges-list">
+                        <div class="badge">
+                            <p>✅</p>
+                            <h4>First Solve</h4>
+                            <p>Solved first problem</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>🟠</p>
+                            <h4>Contestant</h4>
+                            <p>Participated in first contest</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>💎</p>
+                            <h4>Point Collector</h4>
+                            <p>Earned 100 points</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>🌟</p>
+                            <h4>Rising Star</h4>
+                            <p>Earned 500 points</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>🏆</p>
+                            <h4>Legend</h4>
+                            <p>Earned 1000 points</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>🟡</p>
+                            <h4>Problem Solver</h4>
+                            <p>Solved 10 problems</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>🔵</p>
+                            <h4>Marathoner</h4>
+                            <p>Completed 5 contests</p>
+                        </div>
+
+                        <div class="badge">
+                            <p>🔴</p>
+                            <h4>Hard Hero</h4>
+                            <p>Solved 5 hard problems</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-child grid-stats"></div>
+            </div>
+        </section>
+
+        <section id="admin" class="page hidden">
+            <h1>Admin Panel</h1>
+        </section>
+    </main>
+
+    <!-- ✅ Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <label>Email:</label>
+                <input type="email" required>
+                <label>Password:</label>
+                <input type="password" required>
+                <button type="submit" class="login-form btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ✅ Sign Up Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <label for="fullname">Full Name</label>
+                <input type="text" name="fullname" required>
+
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+
+                <label for="email">Email:</label>
+                <input type="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" required>
+
+                <button type="submit" class="submit-form btn">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-firestore-compat.js"></script>
+
+
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

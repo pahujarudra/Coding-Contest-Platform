@@ -1,0 +1,56 @@
+// 1️⃣ Import Firebase modules
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js';
+import { getFirestore, collection, addDoc, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js';
+
+// 2️⃣ Your Firebase config (replace with your actual project or sample config)
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY_HERE",
+    authDomain: "your-project-id.firebaseapp.com",
+    projectId: "your-project-id",
+    storageBucket: "your-project-id.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// 3️⃣ Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 4️⃣ Temporary function to add contests
+async function addSampleContests() {
+  const contests = [
+    {
+      title: "October Challenge",
+      description: "A fun mix of easy, medium, and hard problems for October!",
+      startTime: new Date(Date.now() - 2 * 60 * 60 * 1000), // started 2 hrs ago
+      endTime: new Date(Date.now() + 2 * 60 * 60 * 1000),   // ends in 2 hrs
+    },
+    {
+      title: "Upcoming November Contest",
+      description: "Get ready for November’s coding marathon!",
+      startTime: new Date(Date.now() + 24 * 60 * 60 * 1000), // starts in 1 day
+      endTime: new Date(Date.now() + 26 * 60 * 60 * 1000),   // ends 2 hrs later
+    },
+    {
+      title: "Past Weekly Sprint",
+      description: "A short sprint held last week with algorithmic puzzles.",
+      startTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+      endTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000), // lasted 2 hrs
+    }
+  ];
+
+  for (let contest of contests) {
+    await addDoc(collection(db, "contests"), {
+      ...contest,
+      createdAt: serverTimestamp(),
+      startTime: Timestamp.fromDate(contest.startTime),
+      endTime: Timestamp.fromDate(contest.endTime)
+    });
+    console.log(`✅ Added: ${contest.title}`);
+  }
+
+  console.log("🎉 Sample contests successfully added!");
+}
+
+// 5️⃣ Run it once
+addSampleContests();
