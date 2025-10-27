@@ -155,7 +155,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="grid-child grid-stats"></div>
+                <div class="grid-child grid-stats">
+                    <h2>Statistics</h2>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-value" id="stats-easy">0</span>
+                            <span class="stat-label">Easy Solved</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stats-medium">0</span>
+                            <span class="stat-label">Medium Solved</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stats-hard">0</span>
+                            <span class="stat-label">Hard Solved</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="stats-contests">0</span>
+                            <span class="stat-label">Contests Attended</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -202,12 +222,24 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-firestore-compat.js"></script>
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <label for="edit-fullname">Full Name:</label>
+                <input type="text" name="fullname" id="edit-fullname" required>
 
+                <label for="edit-username">Username:</label>
+                <input type="text" name="username" id="edit-username" required>
 
+                <label for="edit-photourl">Photo URL:</label>
+                <input type="url" name="photourl" id="edit-photourl" placeholder="https://...">
+
+                <button type="submit" class="submit-form btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
 
     <script type="module" src="script.js"></script>
 </body>

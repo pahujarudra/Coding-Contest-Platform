@@ -1,7 +1,7 @@
-// Import modular SDK
+/// Import modular SDK
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js';
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, getDocs, updateDoc } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js';
 
 // Firebase configuration & initialization
 const firebaseConfig = {
@@ -11,11 +11,12 @@ const firebaseConfig = {
     storageBucket: "your-project-id.appspot.com",
     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
     appId: "YOUR_APP_ID"
-};
+  };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 
 
 let currentUser = null
@@ -37,6 +38,9 @@ function showPage(currentPage) {
 // Modal handling
 const loginModal = document.getElementById("login-modal");
 const signupModal = document.getElementById("signup-modal");
+const editProfileModal = document.getElementById("edit-profile-modal");
+const editProfileBtn = document.querySelector(".edit-profile");
+const editProfileForm = document.getElementById("editProfileForm");
 const loginBtn = document.getElementById("login");
 const signupBtn = document.getElementById("sign-up");
 const closeBtns = document.querySelectorAll(".close");
@@ -51,10 +55,12 @@ closeBtns.forEach(btn => btn.addEventListener("click", () => {
     signupModal.style.display = "none";
 }));
 
+
 // Close when clicking outside modal content
 window.addEventListener("click", (e) => {
     if (e.target === loginModal) loginModal.style.display = "none";
     if (e.target === signupModal) signupModal.style.display = "none";
+    if (e.target === editProfileModal) editProfileModal.style.display = "none"; 
 });
 
 // Forms inside modals
@@ -124,6 +130,8 @@ signupForm.addEventListener("submit", async (e) => {
             contests: 0
         });
 
+      
+
         // Fetch saved data
         currentUser = { uid: user.uid, fullname, username, email, photoURL: "", badges: null, recentActivity: null, easy: 0, medium: 0, hard: 0, contests: 0 };
 
@@ -144,6 +152,58 @@ signupForm.addEventListener("submit", async (e) => {
 });
 
 
+// Event listener to open and pre-fill the edit profile modal
+editProfileBtn.addEventListener("click", () => {
+    if (!currentUser) return; 
+
+    editProfileForm.querySelector('input[name="fullname"]').value = currentUser.fullname;
+    editProfileForm.querySelector('input[name="username"]').value = currentUser.username;
+    editProfileForm.querySelector('input[name="photourl"]').value = currentUser.photoURL || "";
+
+    editProfileModal.style.display = "block";
+});
+
+// Event listener for Edit Profile form submission
+editProfileForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const newFullname = editProfileForm.querySelector('input[name="fullname"]').value;
+    const newUsername = editProfileForm.querySelector('input[name="username"]').value;
+    const newPhotoURL = editProfileForm.querySelector('input[name="photourl"]').value;
+
+    if (!currentUser) {
+        alert("You must be logged in to do this.");
+        return;
+    }
+
+    const userDocRef = doc(db, "users", currentUser.uid);
+
+    try {
+        // Update the document in Firestore
+        await updateDoc(userDocRef, {
+            fullname: newFullname,
+            username: newUsername,
+            photoURL: newPhotoURL
+        });
+
+        // Update the local currentUser object
+        currentUser.fullname = newFullname;
+        currentUser.username = newUsername;
+        currentUser.photoURL = newPhotoURL;
+
+        // Update the UI immediately
+        updateUserInfo();
+
+        // Close the modal
+        editProfileModal.style.display = "none";
+        alert("Profile updated successfully!");
+
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Error updating profile: " + error.message);
+    }
+});
+
 // Logout
 const logout = document.getElementById("logout-btn");
 logout.addEventListener("click", (e) => {
@@ -152,23 +212,34 @@ logout.addEventListener("click", (e) => {
 });
 
 function updateUserInfo() {
+    if (!currentUser) return; 
+
+    // Update avatars (navbar and profile page)
     document.querySelectorAll(".avatar-img").forEach((img) => {
-        if (currentUser.photoURL != "") {
+        if (currentUser.photoURL && currentUser.photoURL !== "") {
             img.src = currentUser.photoURL;
         } else {
             img.src = "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg";
         }
     });
 
+    // Update names (navbar and profile page)
     document.querySelectorAll(".fullname").forEach((fullname) => {
         fullname.textContent = currentUser.fullname;
     });
 
+    // Update profile page details
     const username = document.querySelector(".username");
     username.textContent = currentUser.username;
 
     const email = document.querySelector(".email");
     email.textContent = currentUser.email;
+
+    // UPDATE THE STATS BOX
+    document.getElementById("stats-easy").textContent = currentUser.easy || 0;
+    document.getElementById("stats-medium").textContent = currentUser.medium || 0;
+    document.getElementById("stats-hard").textContent = currentUser.hard || 0;
+    document.getElementById("stats-contests").textContent = currentUser.contests || 0;
 }
 
 
